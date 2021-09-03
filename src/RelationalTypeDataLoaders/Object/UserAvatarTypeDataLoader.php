@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace PoPSchema\UserAvatars\TypeDataLoaders;
+namespace PoPSchema\UserAvatars\RelationalTypeDataLoaders\Object;
 
 use PoP\ComponentModel\Instances\InstanceManagerInterface;
-use PoP\ComponentModel\TypeDataLoaders\AbstractTypeDataLoader;
+use PoP\ComponentModel\RelationalTypeDataLoaders\Object\AbstractObjectTypeDataLoader;
 use PoP\Hooks\HooksAPIInterface;
 use PoP\LooseContracts\NameResolverInterface;
 use PoPSchema\UserAvatars\RuntimeRegistries\UserAvatarRuntimeRegistryInterface;
 
-class UserAvatarTypeDataLoader extends AbstractTypeDataLoader
+class UserAvatarTypeDataLoader extends AbstractObjectTypeDataLoader
 {
     public function __construct(
         HooksAPIInterface $hooksAPI,
