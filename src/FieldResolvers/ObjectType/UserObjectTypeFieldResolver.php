@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace PoPSchema\UserAvatars\FieldResolvers\ObjectType;
 
-use Symfony\Contracts\Service\Attribute\Required;
-use PoP\ComponentModel\TypeResolvers\ConcreteTypeResolverInterface;
 use PoP\ComponentModel\FieldResolvers\ObjectType\AbstractObjectTypeFieldResolver;
 use PoP\ComponentModel\Schema\SchemaDefinition;
+use PoP\ComponentModel\TypeResolvers\ConcreteTypeResolverInterface;
 use PoP\ComponentModel\TypeResolvers\ObjectType\ObjectTypeResolverInterface;
 use PoPSchema\UserAvatars\ComponentConfiguration;
 use PoPSchema\UserAvatars\ObjectModels\UserAvatar;
@@ -15,6 +14,7 @@ use PoPSchema\UserAvatars\RuntimeRegistries\UserAvatarRuntimeRegistryInterface;
 use PoPSchema\UserAvatars\TypeAPIs\UserAvatarTypeAPIInterface;
 use PoPSchema\UserAvatars\TypeResolvers\ObjectType\UserAvatarObjectTypeResolver;
 use PoPSchema\Users\TypeResolvers\ObjectType\UserObjectTypeResolver;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class UserObjectTypeFieldResolver extends AbstractObjectTypeFieldResolver
 {
@@ -49,10 +49,10 @@ class UserObjectTypeFieldResolver extends AbstractObjectTypeFieldResolver
 
     public function getSchemaFieldDescription(ObjectTypeResolverInterface $objectTypeResolver, string $fieldName): ?string
     {
-        $descriptions = [
+        return match ($fieldName) {
             'avatar' => $this->translationAPI->__('User avatar', 'user-avatars'),
-        ];
-        return $descriptions[$fieldName] ?? parent::getSchemaFieldDescription($objectTypeResolver, $fieldName);
+            default => parent::getSchemaFieldDescription($objectTypeResolver, $fieldName),
+        };
     }
 
     public function getSchemaFieldArgs(ObjectTypeResolverInterface $objectTypeResolver, string $fieldName): array
