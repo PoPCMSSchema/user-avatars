@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PoPCMSSchema\UserAvatars\FieldResolvers\ObjectType;
 
+use PoP\ComponentModel\TypeResolvers\InputTypeResolverInterface;
 use PoP\ComponentModel\QueryResolution\FieldDataAccessorInterface;
 use PoP\ComponentModel\Feedback\ObjectTypeFieldResolutionFeedbackStore;
 use PoP\ComponentModel\FieldResolvers\ObjectType\AbstractObjectTypeFieldResolver;
@@ -33,6 +34,7 @@ class UserObjectTypeFieldResolver extends AbstractObjectTypeFieldResolver
     }
     final protected function getUserAvatarTypeAPI(): UserAvatarTypeAPIInterface
     {
+        /** @var UserAvatarTypeAPIInterface */
         return $this->userAvatarTypeAPI ??= $this->instanceManager->getInstance(UserAvatarTypeAPIInterface::class);
     }
     final public function setUserAvatarRuntimeRegistry(UserAvatarRuntimeRegistryInterface $userAvatarRuntimeRegistry): void
@@ -41,6 +43,7 @@ class UserObjectTypeFieldResolver extends AbstractObjectTypeFieldResolver
     }
     final protected function getUserAvatarRuntimeRegistry(): UserAvatarRuntimeRegistryInterface
     {
+        /** @var UserAvatarRuntimeRegistryInterface */
         return $this->userAvatarRuntimeRegistry ??= $this->instanceManager->getInstance(UserAvatarRuntimeRegistryInterface::class);
     }
     final public function setUserAvatarObjectTypeResolver(UserAvatarObjectTypeResolver $userAvatarObjectTypeResolver): void
@@ -49,6 +52,7 @@ class UserObjectTypeFieldResolver extends AbstractObjectTypeFieldResolver
     }
     final protected function getUserAvatarObjectTypeResolver(): UserAvatarObjectTypeResolver
     {
+        /** @var UserAvatarObjectTypeResolver */
         return $this->userAvatarObjectTypeResolver ??= $this->instanceManager->getInstance(UserAvatarObjectTypeResolver::class);
     }
     final public function setIntScalarTypeResolver(IntScalarTypeResolver $intScalarTypeResolver): void
@@ -57,9 +61,13 @@ class UserObjectTypeFieldResolver extends AbstractObjectTypeFieldResolver
     }
     final protected function getIntScalarTypeResolver(): IntScalarTypeResolver
     {
+        /** @var IntScalarTypeResolver */
         return $this->intScalarTypeResolver ??= $this->instanceManager->getInstance(IntScalarTypeResolver::class);
     }
 
+    /**
+     * @return array<class-string<ObjectTypeResolverInterface>>
+     */
     public function getObjectTypeResolverClassesToAttachTo(): array
     {
         return [
@@ -67,6 +75,9 @@ class UserObjectTypeFieldResolver extends AbstractObjectTypeFieldResolver
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function getFieldNamesToResolve(): array
     {
         return [
@@ -82,6 +93,9 @@ class UserObjectTypeFieldResolver extends AbstractObjectTypeFieldResolver
         };
     }
 
+    /**
+     * @return array<string,InputTypeResolverInterface>
+     */
     public function getFieldArgNameTypeResolvers(ObjectTypeResolverInterface $objectTypeResolver, string $fieldName): array
     {
         return match ($fieldName) {
@@ -140,7 +154,7 @@ class UserObjectTypeFieldResolver extends AbstractObjectTypeFieldResolver
                     'size' => $avatarSize,
                 ];
                 // Generate a hash to represent the ID of the avatar given its properties
-                $avatarID = hash('md5', json_encode($avatarIDComponents));
+                $avatarID = hash('md5', (string)json_encode($avatarIDComponents));
                 $this->getUserAvatarRuntimeRegistry()->storeUserAvatar(new UserAvatar($avatarID, $avatarSrc, $avatarSize));
                 return $avatarID;
         }
